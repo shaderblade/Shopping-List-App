@@ -12,7 +12,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
-class ShoppingListAdapter(private var location: Context, private var shoppingItemLayout: Int, private var shoppingListArray: ArrayList<ShoppingList>) : ArrayAdapter<ShoppingList>(location, shoppingItemLayout, shoppingListArray) {
+class ShoppingListAdapter(
+    private var location: Context,
+    private var shoppingItemLayout: Int,
+    private var shoppingListArray: ArrayList<ShoppingList>) : ArrayAdapter<ShoppingList>(location, shoppingItemLayout, shoppingListArray) {
+    
     //------------Firebase  Database Declaration-------------------
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
 

@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-        //--------------Setting uo button click function------------------
+        //--------------Setting up button click function------------------
         btnSignIn.setOnClickListener {
             //------------Validating if the given information is correct--------
             if(etEmail.text.toString().isEmpty()) {
