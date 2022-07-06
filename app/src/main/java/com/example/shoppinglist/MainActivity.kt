@@ -1,17 +1,18 @@
 package com.example.shoppinglist
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+
 class MainActivity : AppCompatActivity() {
 
     //------------Firebase Database Object Declaration-------------------
@@ -37,7 +38,8 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         //------------------Initializing reference to Firebase Database--------------
-        val referenceShoppingList: DatabaseReference  = database.reference.child("Shopping List").child(auth.currentUser?.uid.toString())
+        val referenceShoppingList: DatabaseReference =
+            database.reference.child("Shopping List").child(auth.currentUser?.uid.toString())
 
         //------------------Initializing the widgets-----------------------------
         fab = findViewById(R.id.fab)
@@ -46,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
         //------------------Button click action---------------------------------
         fab.setOnClickListener {
-            val alertDialog = ShoppingItemDialog(this, object: AddShoppingItem{
+            val alertDialog = ShoppingItemDialog(this, object : AddShoppingItem {
                 override fun setData(name: String, amount: String) {
 
                     //---------------Insert data into firebase-------------------
@@ -54,11 +56,16 @@ class MainActivity : AppCompatActivity() {
                     id = token
                     val insertShoppingItem = ShoppingList(id, name, amount)
 
-                    referenceShoppingList.child(token).setValue(insertShoppingItem).addOnCompleteListener { status ->
-                        if (!status.isSuccessful) {
-                            Toast.makeText(this@MainActivity, "Record insertion failed", Toast.LENGTH_SHORT).show()
+                    referenceShoppingList.child(token).setValue(insertShoppingItem)
+                        .addOnCompleteListener { status ->
+                            if (!status.isSuccessful) {
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    "Record insertion failed",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
-                    }
                 }
             })
             alertDialog.show()
@@ -77,12 +84,14 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 //------------Storing the item in ListView-------------------------
-                listView.adapter = ShoppingListAdapter(this@MainActivity, R.layout.shopping_item, shoppingList)
+                listView.adapter =
+                    ShoppingListAdapter(this@MainActivity, R.layout.shopping_item, shoppingList)
                 shoppingBags.isVisible = shoppingList.isEmpty()
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@MainActivity, "Error in retrieving data", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Error in retrieving data", Toast.LENGTH_SHORT)
+                    .show()
             }
         })
     }
