@@ -15,8 +15,9 @@ import com.google.firebase.database.FirebaseDatabase
 class ShoppingListAdapter(
     private var location: Context,
     private var shoppingItemLayout: Int,
-    private var shoppingListArray: ArrayList<ShoppingList>) : ArrayAdapter<ShoppingList>(location, shoppingItemLayout, shoppingListArray) {
-    
+    private var shoppingListArray: ArrayList<ShoppingList>
+) : ArrayAdapter<ShoppingList>(location, shoppingItemLayout, shoppingListArray) {
+
     //------------Firebase  Database Declaration-------------------
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
 
@@ -24,7 +25,8 @@ class ShoppingListAdapter(
     private val auth = FirebaseAuth.getInstance()
 
 
-    private val referenceShoppingList: DatabaseReference = database.reference.child("Shopping List").child(auth.currentUser?.uid.toString())
+    private val referenceShoppingList: DatabaseReference =
+        database.reference.child("Shopping List").child(auth.currentUser?.uid.toString())
 
     //------------------Inflate view-----------------------------------
     private var layoutInflater: LayoutInflater = LayoutInflater.from(location)
@@ -47,11 +49,12 @@ class ShoppingListAdapter(
 
         //-------------------Removes the shopping item----------------------
         shoppingViewHolder.ivDelete.setOnClickListener {
-            referenceShoppingList.child(shoppingListArray[position].id).removeValue().addOnCompleteListener { status ->
-                if(!status.isSuccessful){
-                    Toast.makeText(location, "Deletion failed", Toast.LENGTH_SHORT).show()
+            referenceShoppingList.child(shoppingListArray[position].id).removeValue()
+                .addOnCompleteListener { status ->
+                    if (!status.isSuccessful) {
+                        Toast.makeText(location, "Deletion failed", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
         }
 
         //-----------------Decreases the amount of item----------------------
@@ -61,7 +64,10 @@ class ShoppingListAdapter(
                 amountDecrease--
                 shoppingListArray[position].amount = amountDecrease.toString()
 
-                shoppingListUpdater(shoppingListArray[position].id, shoppingListArray[position].amount)
+                shoppingListUpdater(
+                    shoppingListArray[position].id,
+                    shoppingListArray[position].amount
+                )
             }
         }
 
@@ -78,14 +84,15 @@ class ShoppingListAdapter(
     }
 
     //--------------------Increases or decreases the amount of a Shopping Item--------------------
-    private fun shoppingListUpdater(id: String, amount: String){
+    private fun shoppingListUpdater(id: String, amount: String) {
         val shoppingListUpdate = mutableMapOf<String, Any>()
         shoppingListUpdate["amount"] = amount
-        referenceShoppingList.child(id).updateChildren(shoppingListUpdate).addOnCompleteListener { status ->
-            if (!status.isSuccessful) {
-                Toast.makeText(location, "Record update failed", Toast.LENGTH_SHORT).show()
+        referenceShoppingList.child(id).updateChildren(shoppingListUpdate)
+            .addOnCompleteListener { status ->
+                if (!status.isSuccessful) {
+                    Toast.makeText(location, "Record update failed", Toast.LENGTH_SHORT).show()
+                }
             }
-        }
     }
 
     //-----------------Inner class to remember the view-------------------------------
